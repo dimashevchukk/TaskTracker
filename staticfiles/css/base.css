@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+.navbar {
+    background-color: #008cff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.auth-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #007bff;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: center;
+}
