@@ -1,0 +1,43 @@
+{% extends 'main/home.html' %}
+
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+    <h2 class="text-center mt-3">Your Tasks</h2>
+    <a href="{% url 'add_task' %}" class="btn btn-success mb-3">Add New Task</a>
+
+    <div class="task-list">
+        {% for task in tasks %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'task_detail' task.id %}" class="text-decoration-none">{{ task.title }}</a>
+                    </h5>
+                    <p class="card-text">{{ task.description }}</p>
+                    <p><strong>Created:</strong> {{ task.created_at }}</p>
+                    {% if task.due_date %} <p><strong>Due:</strong> {{ task.due_date }}</p> {% endif %}
+
+                    <!-- Форма для оновлення статусу -->
+                    <form action="{% url 'toggle_task' task.id %}" method="POST" class="d-inline-block">
+                        {% csrf_token %}
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="is_completed" id="task-{{ task.id }}"
+                                   onchange="this.form.submit()" {% if task.is_completed %}checked{% endif %}>
+                            <label class="form-check-label" for="task-{{ task.id }}">
+                                Completed
+                            </label>
+                        </div>
+                    </form>
+
+                    <!-- Видалення задачі -->
+                    <form action="{% url 'delete_task' task.id %}" method="POST" class="d-inline-block">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm ms-3">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <p>No tasks yet.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Tracker</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">Task Tracker</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><span class="nav-link">{{ user.username }}</span></li>
+                            <li class="nav-item">
+                                {% if request.resolver_match.url_name != "tasks" %}
+                                    <a class="nav-link" href="{% url 'tasks' %}">My Tasks</a>
+                                {% endif %}
+                            </li>
+                            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link">Log out</button>
+                            </form>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log in</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Registration</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            {% block content %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="task-overview" style="padding: 15px; border-left: 4px solid #007bff;
+                        margin-top: 35px; background-color: #f8f9fa; border-radius: 5px;">
+                            <h4 style="margin-bottom: 15px;">Task Overview</h4>
+                            <p style="margin-bottom: 10px;"><strong>Tasks:</strong> {{ total_tasks }}</p>
+                            <p style="margin-bottom: 10px;"><strong>Completed:</strong> {{ completed_tasks }}</p>
+                            <p style="margin-bottom: 2px;"><strong>In Progress:</strong> {{ in_progress_tasks }}</p>
+                        </div>
+                        <div class="deadline-statistics" style="padding: 15px; border-left: 4px solid #ae00ff;
+                        margin-top: 35px; background-color: #f8f9fa; border-radius: 5px;">
+                            <h5 style="margin-bottom: 15px;">Deadline Statistics</h5>
+                            <p style="margin-bottom: 10px;"><strong>Overdue:</strong> {{ overdue_tasks }}</p>
+                            <p style="margin-bottom: 10px;"><strong>Due Soon (≤3 days):</strong> {{ due_soon_tasks }}</p>
+                            <p style="margin-bottom: 2px;"><strong>Due Later (&gt;3 days):</strong> {{ due_later_tasks }}</p>
+                        </div>
+                        <div class="deadline-statistics" style="padding: 15px; border-left: 4px solid #ff0000;
+                        margin-top: 35px; background-color: #f8f9fa; border-radius: 5px;">
+                            <h5 style="margin-bottom: 15px;">Upcoming Task</h5>
+                            {% if nearest_task %}
+                            <p style="margin-bottom: 10px;"><strong>Task:</strong> {{ nearest_task.title }}</p>
+                            <p style="margin-bottom: 2px;"><strong>Due Date:</strong> {{ nearest_task.due_date }}</p>
+                            {% else %}
+                            <p style="margin-bottom: 2px;"><strong>No tasks left</strong></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% if total_tasks > 0 %}
+                        <div class="chart-container" style="max-width: 500px; max-height: 500px;
+                        margin-left: 100px; margin-top: 25px">
+                            <canvas id="taskChart"></canvas>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+        <footer>
+            <div class="container">
+                <p>© 2025 Task tracker. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('taskChart').getContext('2d');
+        const taskChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Completed', 'In Progress'],
+                datasets: [{
+                    label: 'Task Status',
+                    data: [{{ completed_tasks }}, {{ in_progress_tasks }}],
+                    backgroundColor: [
+                        'rgb(98,4,163)',
+                        'rgba(128,118,118,0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(98,4,163, 1)',
+                        'rgba(128,118,118, 0.2)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Task Status Overview'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

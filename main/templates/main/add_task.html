@@ -1,0 +1,28 @@
+{% extends 'main/home.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Add Task{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card p-4 shadow-sm" style="width: 400px;">
+        <h2 class="text-center">Add New Task</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                {{ form.title| add_class:"form-control w-100"}}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                {{ form.description|add_class:"form-control w-100" }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Due Date (YYYY-MM-DD)</label>
+                {{ form.due_date|add_class:"form-control w-100" }}
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Add Task</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
