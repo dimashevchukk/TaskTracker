@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^9009ht33mhk)-2!u!i1b2ucx=#vvzk_*=uaipgmz%0o0&echr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['tasktracker-production-bb9a.up.railway.app', 'localhost']
 
 
