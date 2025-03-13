@@ -1,18 +1,20 @@
-from audioop import reverse
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import login, logout
 from django.http import HttpResponse
 from django.utils.timezone import now
 from .forms import TaskForm
 from .models import Task
-
 from datetime import timedelta
 
 
 def home(request):
+    user = request.user
+    if isinstance(user, AnonymousUser):
+        return redirect('login')
+
     tasks = Task.objects.filter(user=request.user)
     total_tasks = tasks.count()
     completed_tasks = tasks.filter(is_completed=True).count()

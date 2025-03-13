@@ -26,6 +26,10 @@ SECRET_KEY = 'django-insecure-^9009ht33mhk)-2!u!i1b2ucx=#vvzk_*=uaipgmz%0o0&echr
 DEBUG = True
 ALLOWED_HOSTS = ['tasktracker-production-bb9a.up.railway.app', 'localhost']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://tasktracker-production-bb9a.up.railway.app',
+    'http://tasktracker-production-bb9a.up.railway.app',  # Якщо ви використовуєте http
+]
 
 # Application definition
 
