@@ -59,7 +59,11 @@ body {
 }
 
 footer {
-    background-color: #f8f9fa;
-    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     text-align: center;
+    padding: 10px 0;
+    background-color: #333;
+    color: white;
 }
